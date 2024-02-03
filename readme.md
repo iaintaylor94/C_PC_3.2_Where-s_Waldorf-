@@ -35,5 +35,6 @@ The input states the number of cases to process on a line followed by a blank li
 A grid containing the letters input from the file will be created, padded with '\0' on the border. The program will search the rows, collumns and diagonals of all lines beginning on the top or left edge of the grid. If a word is found, its location (stored in the dictionary) will be set to the appropriate value. Finally the locations of the words will be printed to the terminal.
 
 ### Bug Checklist
+- [ ] WordGrid truncated by one character
 
 [^1]: Programming Challenges By S.Skienna and M.Revilla, page 67

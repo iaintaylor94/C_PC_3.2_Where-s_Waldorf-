@@ -68,12 +68,13 @@ int getNumGames(FILE *fp) {
   char line [kMaxLineLength];
   fgets (line, kMaxLineLength, fp);
   line [strcspn(line, "\n")] = '\0';
+  int numGames = atoi(line);
 
   // Strip blank line
   fgets (line, kMaxLineLength, fp);
   
   // Return num Games
-  return atoi(line);
+  return numGames;
 }
 
 // Word Grid
@@ -83,26 +84,25 @@ void fillWordGrid (struct grid *g) {
   fgets (line, kMaxLineLength, gInputFile);
   line [strcspn(line, "\n")] = '\0';
   sscanf (line, "%d %d", &g->gridHeight, &g->gridWidth);
-  printf ("%d %d\n", g->gridHeight, g->gridWidth);
+  printf ("Grid height: %d\nGrid width: %d\n", g->gridHeight, g->gridWidth);
 
   // Fill Word Grid - with input
   for (int i = 1; i < g->gridHeight + 1; i ++) {
+    char line [kMaxLineLength];
     fgets (line, kMaxLineLength, gInputFile);
     line [strcspn(line, "\n")] = '\0';
-    char *token = strtok (line, " ");
-    g->wordGrid[i][1] = token [0];
     
-    token = strtok (NULL, " ");
-    for (int j = 2; token != NULL; j ++) {
-      g->wordGrid[i][j] = token [0];
-      token = strtok (NULL, " ");
+    for (int j = 1; j < g->gridWidth + 1; j ++) {
+      g->wordGrid[i][j] = line[j - 1];
     }
   }
   // Fill Word Grid - with padding
+  // Collumns
   for (int i = 0; i < g->gridHeight + 2; i ++) {
     g->wordGrid[i][0] = '\0';
-    g->wordGrid[i][g->gridWidth] = '\0';
+    g->wordGrid[i][g->gridWidth + 2] = '\0';
   }
+  // Rows
   for (int i = 0; i < g->gridWidth + 2; i ++) {
     g->wordGrid[0][i] = '\0';
     g->wordGrid[g->gridHeight + 2][i] = '\0';
