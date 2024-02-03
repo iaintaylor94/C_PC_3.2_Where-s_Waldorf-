@@ -24,6 +24,20 @@ struct grid {
 void fillWordGrid (struct grid *);
 void printWordGrid (struct grid);
 
+// Dictionary
+const int kMaxNumWords = 20;
+struct pairs {
+  char word[kMaxLineLength];
+  int mCoord;
+  int nCoord;
+};
+struct dictionary {
+  struct pairs entries[kMaxNumWords];
+  int numWords;
+} gDictionary;
+void fillDictionary (struct dictionary *);
+
+
 int main(int argc, char *argv[]) {
 
   /*-------------------------------FILE INITIALIZATION START-----------------------------*/
@@ -109,6 +123,8 @@ void fillWordGrid (struct grid *g) {
   }
 }
 void printWordGrid (struct grid g) {
+  printf ("WORD GRID  \n");
+  printf ("-----------\n");
   for (int i = 1; i < g.gridHeight + 1; i ++) {
     for (int j = 1; j < g.gridWidth + 1; j ++) {
       printf ("%c", g.wordGrid[i][j]);
