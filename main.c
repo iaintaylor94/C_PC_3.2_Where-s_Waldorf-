@@ -346,7 +346,7 @@ void findWords (struct grid g, struct dictionary d) {
   }
   for (int i = 0; i < g.gridWidth; i++) {
     searchVertical (i);
-    searchDiagonalFS (0, i);
-    searchDiagonalBS (0, i);
+    searchDiagonalFS (0, i); // Not working backwards ??
+    searchDiagonalBS (0, i); // Not working backwards ??
   }
 }
