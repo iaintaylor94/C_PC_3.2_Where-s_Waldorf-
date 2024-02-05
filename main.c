@@ -40,6 +40,20 @@ void printDictionary (struct dictionary);
 void getWord (int, char *, struct dictionary);
 void updateDictionary (int, int, int, struct dictionary *);
 
+// Word Search
+void findWord (struct grid, struct dictionary);
+
+void getLineHorizontal (int, char*);
+void searchLineHorizontal (char*, int, bool);
+void searchHorizontal (int);
+
+void getLineVertical (int, char*);
+void searchLineVertical (char*, int, bool);
+void searchVertical (int);
+
+void searchDiagonalFS (int, int);
+void searchDiagonalBS (int, int);
+
 
 int main(int argc, char *argv[]) {
 
@@ -71,6 +85,21 @@ int main(int argc, char *argv[]) {
   updateDictionary (2, 2, 2, &gDictionary);
   printf ("%d %d\n", gDictionary.entries[2].mCoord, gDictionary.entries[2].nCoord);
 
+  printDictionary (gDictionary);
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
   /*--------------------------------MAIN PROGRAM END--------------------------------------*/
@@ -181,4 +210,84 @@ void getWord (int i, char *line, struct dictionary d) {
 void updateDictionary (int i, int m, int n, struct dictionary *d) {
   d->entries[i].mCoord = m;
   d->entries[i].nCoord = n;
+}
+
+
+// Word Search
+void getLineHorizontal (int m, char *line) {
+  strcpy (line, &gWordGrid.wordGrid[m][1]);
+}
+void searchLineHorizontal (char *line, int m, bool forwards) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    if (position != NULL) {
+      int offset = position - line;
+      if (forwards) {
+        updateDictionary(i, m, offset + 1, &gDictionary);
+      }
+      else {
+        updateDictionary(i, m, strlen(line) - offset + 1, &gDicitonary);
+      }
+    }
+  }
+}
+void searchHorizontal (int m) {
+  char line [kMaxLineLength];
+  getLineHorizontal (m, line);
+  searchLineHorizontal (line, m, true);
+  strrev (line);
+  searchLineHorizontal (line, m, false);
+}
+
+
+void getLineVertical (int n, char *line) {
+  for (int i = 1; i < gWordGrid.gridHeight + 2; i ++) {
+    line[i - 1] = gWordGrid.wordGrid[i][n];
+  }
+}
+void searchLineVertical (char *line, int n, bool forwards) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    if (position != NULL) {
+      int offset = position - line;
+      if (forwards) {
+        updateDictionary(i, offset + 1, n, &gDictionary);
+      }
+      else {
+        updateDictionary(i, strlen(line) - offset + 1, n, &gDicitonary);
+      }
+    }
+  }
+}
+void searchVertical (int n) {
+  char line [kMaxLineLength];
+  getLineVertical (n, line);
+  searchLineVertical (line, n, true);
+  strrev (line);
+  searchLineVertical (line, n, false);
+}
+
+
+void searchDiagonalFS (int m, int n) {
+  char line [kMaxLineLength];
+  
+}
+
+
+
+
+void searchDiagonalBS (int m, int n);
+
+
+void findWord (struct grid g, struct dictionary d) {
+  for (int i = 0;  i < g.gridHeight; i++) {
+    searchHorizontal (i);
+    searchDiagonalFS (i, 0);
+    searchDiagonalBS (i, 0);
+  }
+  for (int i = 0; i < g.gridWidth; i++) {
+    searchVertical (0, i);
+    searchDiagonalFS (0, i);
+    searchDiagonalBS (0, i);
+  }
 }
