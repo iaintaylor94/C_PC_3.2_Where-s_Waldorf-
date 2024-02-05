@@ -37,6 +37,7 @@ struct dictionary {
 } gDictionary;
 void fillDictionary (struct dictionary *);
 void printDictionary (struct dictionary);
+void getWord (int, char *, struct dictionary);
 
 
 int main(int argc, char *argv[]) {
@@ -61,6 +62,10 @@ int main(int argc, char *argv[]) {
 
   fillDictionary(&gDictionary);
   printDictionary(gDictionary);
+
+  char line [kMaxLineLength];
+  getWord (2, line, gDictionary);
+  printf ("%s\n", line);
 
 
 
@@ -165,4 +170,7 @@ void printDictionary (struct dictionary d) {
     printf ("%-20s  %2d  %2d\n", d.entries[i].word, d.entries[i].mCoord, d.entries[i].nCoord);
   }
   printf ("\n");
+}
+void getWord (int i, char *line, struct dictionary d) {
+  strcpy (line, d.entries[i].word);
 }
