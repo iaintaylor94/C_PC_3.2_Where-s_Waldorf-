@@ -36,6 +36,7 @@ struct dictionary {
   int numWords;
 } gDictionary;
 void fillDictionary (struct dictionary *);
+void printDictionary (struct dictionary);
 
 
 int main(int argc, char *argv[]) {
@@ -57,6 +58,9 @@ int main(int argc, char *argv[]) {
   printf ("Number of Games: %d\n", gNumGames);
   fillWordGrid(&gWordGrid);
   printWordGrid(gWordGrid);
+
+  fillDictionary(&gDictionary);
+  printDictionary(gDictionary);
 
 
 
@@ -110,6 +114,7 @@ void fillWordGrid (struct grid *g) {
       g->wordGrid[i][j] = line[j - 1];
     }
   }
+  
   // Fill Word Grid - with padding
   // Collumns
   for (int i = 0; i < g->gridHeight + 2; i ++) {
@@ -130,6 +135,31 @@ void printWordGrid (struct grid g) {
       printf ("%c", g.wordGrid[i][j]);
     }
     printf ("\n");
+  }
+  printf ("\n");
+}
+
+// Dictionary
+void fillDictionary (struct dictionary *d) {
+  // Get num words
+  char line [kMaxLineLength];
+  fgets (line, kMaxLineLength, gInputFile);
+  line [strcspn(line, "\n")] = '\0';
+  d->numWords = atoi(line);
+
+  // Fill Dictionary
+  for (int i = 0; i < d->numWords; i ++) {
+    char line [kMaxLineLength];
+    fgets (line, kMaxLineLength, gInputFile);
+    line [strcspn(line, "\n")] = '\0';
+    sscanf (line, "%s", d->entries[i].word);
+  }
+}
+void printDictionary (struct dictionary d) {
+  printf ("DICTIONARY  \n");
+  printf ("------------\n");
+  for (int i = 0; i < d.numWords; i ++) {
+    printf ("%s\n", d.entries[i].word);
   }
   printf ("\n");
 }
