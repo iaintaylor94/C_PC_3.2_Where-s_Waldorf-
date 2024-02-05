@@ -153,13 +153,16 @@ void fillDictionary (struct dictionary *d) {
     fgets (line, kMaxLineLength, gInputFile);
     line [strcspn(line, "\n")] = '\0';
     sscanf (line, "%s", d->entries[i].word);
+    d->entries[i].mCoord = -1;
+    d->entries[i].nCoord = -1;
   }
 }
 void printDictionary (struct dictionary d) {
   printf ("DICTIONARY  \n");
-  printf ("------------\n");
+  printf ("Name                  mC  nC\n");
+  printf ("--------------------  --  --\n");
   for (int i = 0; i < d.numWords; i ++) {
-    printf ("%s\n", d.entries[i].word);
+    printf ("%-20s  %2d  %2d\n", d.entries[i].word, d.entries[i].mCoord, d.entries[i].nCoord);
   }
   printf ("\n");
 }
