@@ -36,6 +36,7 @@ A grid containing the letters input from the file will be created, padded with '
 
 ### Bug Checklist
 - [x] WordGrid truncated by one character
-- [ ] Word search from top row not working ?
+- [ ] Fix mC collumn
+- [ ] fix "dagbert" (horizontal - right to left)
 
 [^1]: Programming Challenges By S.Skienna and M.Revilla, page 67

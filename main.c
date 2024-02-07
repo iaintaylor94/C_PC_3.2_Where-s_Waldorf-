@@ -466,6 +466,29 @@ void findBR (int n) {
   searchLineDiagonalBR (n, line);
 }
 
+void getLineDiagonalBL (int n, char *line) {
+  int k = 0;
+  for (int m = gWordGrid.gridHeight; gWordGrid.wordGrid[m][n] != '\0'; m--, n--) {
+    line [k] = gWordGrid.wordGrid[m][n];
+    line [k + 1] = '\0';
+    k++;
+  }
+}
+void searchLineDiagonalBL (int n, char *line) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    int offset = position - line;
+    if (position != NULL) {
+      updateDictionary(i, gWordGrid.gridHeight - offset, n - offset, &gDictionary);
+    }
+  }
+}
+void findBL (int n) {
+  char line [kMaxLineLength];
+  getLineDiagonalBL (n, line);
+  searchLineDiagonalBL (n, line);
+}
+
 void findWords (struct grid g, struct dictionary d) {
   searchHorizontal ();
   searchVertical ();
