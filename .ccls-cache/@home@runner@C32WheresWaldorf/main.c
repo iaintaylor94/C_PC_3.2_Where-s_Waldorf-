@@ -301,6 +301,27 @@ void findLD (int m) {
   searchLineDiagonalLD (m, line);
 }
 
+void getLineDiagonalLU (int m, char *line) {
+  for (int j = m, n = 1; gWordGrid.wordGrid[m][n] != '\0'; m++, n++) {
+    line [n - 1] = gWordGrid.wordGrid[m][n];
+    line [n] = '\0';
+  }
+}
+void searchLineDiagonalLU (int m, char *line) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    int offset = position - line;
+    if (position != NULL) {
+      updateDictionary(i, m + offset, 1 + offset, &gDictionary);
+    }
+  }
+}
+void findLU (int m) {
+  char line [kMaxLineLength];
+  getLineDiagonalLU (m, line);
+  searchLineDiagonalLU (m, line);
+}
+
 void findWords (struct grid g, struct dictionary d) {
   searchHorizontal ();
   searchVertical ();
