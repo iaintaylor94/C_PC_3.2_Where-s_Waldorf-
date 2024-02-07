@@ -53,15 +53,8 @@ void getLineVertical (int, char*);
 void searchLineVertical (char*, int, bool);
 void searchVertical (void);
 
-void getLineDiagonalBS (int, int, char*);
-void searchLineDiagonalBS (char*, int, int, bool);
-void searchDiagonalBS (int, int);
 
-int getMLeft (int, int);
-int getNLeft (int, int);
-void getLineDiagonalFS (int, int, char*);
-void searchLineDiagonalFS (char*, int, int, bool);
-void searchDiagonalFS (int, int);
+
 
 
 
@@ -228,6 +221,7 @@ void reverseString (char *line) {
     line[j] = temp;
   }
 }
+
 void getLineHorizontal (int m, char *line) {
   strcpy (line, &gWordGrid.wordGrid[m][1]);
 }
@@ -286,19 +280,36 @@ void searchVertical () {
 }
 
 
-
-
+void getLineDiagonalLD (int m, char *line) {
+  for (int j = m, n = 1; gWordGrid.wordGrid[m][n] != '\0'; m--, n++) {
+    line [n - 1] = gWordGrid.wordGrid[m][n];
+    line [n] = '\0';
+  }
+}
+void searchLineDiagonalLD (int m, char *line) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    int offset = position - line;
+    if (position != NULL) {
+      updateDictionary(i, m - offset, 1 + offset, &gDictionary);
+    }
+  }
+}
+void findLD (int m) {
+  char line [kMaxLineLength];
+  getLineDiagonalLD (m, line);
+  searchLineDiagonalLD (m, line);
+}
 
 void findWords (struct grid g, struct dictionary d) {
   searchHorizontal ();
   searchVertical ();
   
   for (int i = 0;  i < g.gridHeight; i++) { // LEFT
-    //searchDiagonal (i, 0);
-    //searchDiagonalBSLeft (i, 0);
+    findLD (i);
+    findLU (i);
   }
   for (int i = 0; i < g.gridWidth; i++) { // TOP
-    //searchDiagonalFS (0, i); 
-    //searchDiagonalBS (0, i); 
+    
   }
 }
