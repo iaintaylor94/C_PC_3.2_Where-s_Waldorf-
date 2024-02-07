@@ -149,7 +149,7 @@ void fillWordGrid (struct grid *g) {
     line [strcspn(line, "\n")] = '\0';
     
     for (int j = 1; j < g->gridWidth + 1; j ++) {
-      g->wordGrid[i][j] = line[j - 1];
+      g->wordGrid[i][j] = tolower(line[j - 1]);
     }
   }
   
@@ -190,6 +190,11 @@ void fillDictionary (struct dictionary *d) {
     char line [kMaxLineLength];
     fgets (line, kMaxLineLength, gInputFile);
     line [strcspn(line, "\n")] = '\0';
+
+    for (int i = 0; i < strlen(line); i ++) {
+      line[i] = tolower(line[i]);
+    }
+    
     sscanf (line, "%s", d->entries[i].word);
     d->entries[i].mCoord = -1;
     d->entries[i].nCoord = -1;
