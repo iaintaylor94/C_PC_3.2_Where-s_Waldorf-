@@ -47,16 +47,18 @@ void findWords (struct grid, struct dictionary);
 
 void getLineHorizontal (int, char*);
 void searchLineHorizontal (char*, int, bool);
-void searchHorizontal (int);
+void searchHorizontal (void);
 
 void getLineVertical (int, char*);
 void searchLineVertical (char*, int, bool);
-void searchVertical (int);
+void searchVertical (void);
 
 void getLineDiagonalBS (int, int, char*);
 void searchLineDiagonalBS (char*, int, int, bool);
 void searchDiagonalBS (int, int);
 
+int getMLeft (int, int);
+int getNLeft (int, int);
 void getLineDiagonalFS (int, int, char*);
 void searchLineDiagonalFS (char*, int, int, bool);
 void searchDiagonalFS (int, int);
@@ -243,12 +245,14 @@ void searchLineHorizontal (char *line, int m, bool forwards) {
     }
   }
 }
-void searchHorizontal (int m) {
-  char line [kMaxLineLength];
-  getLineHorizontal (m, line);
-  searchLineHorizontal (line, m, true);
-  reverseString (line);
-  searchLineHorizontal (line, m, false);
+void searchHorizontal () {
+  for (int m = 0; m < gWordGrid.gridHeight; m++) {
+    char line [kMaxLineLength];
+    getLineHorizontal (m, line);
+    searchLineHorizontal (line, m, true);
+    reverseString (line);
+    searchLineHorizontal (line, m, false);
+  }
 }
 
 
@@ -271,87 +275,30 @@ void searchLineVertical (char *line, int n, bool forwards) {
     }
   }
 }
-void searchVertical (int n) {
-  char line [kMaxLineLength];
-  getLineVertical (n, line);
-  searchLineVertical (line, n, true);
-  reverseString (line);
-  searchLineVertical (line, n, false);
-}
-
-
-void getLineDiagonalBS (int m, int n, char *line) {
-  int k = 0;
-  for (int i = m, j = n; gWordGrid.wordGrid[i][j] != '\0'; i++, j++) {
-    line[k] = gWordGrid.wordGrid[i][j];
-    k++;
-  }
-  line[k + 1] = '\0';
-}
-void searchLineDiagonalBS (char *line, int m, int n, bool forwards) {
-  for (int i = 0; i < gDictionary.numWords; i++) {
-    char *position = strstr(line, gDictionary.entries[i].word);
-    if (position != NULL) {
-      int offset = position - line;
-      if (forwards) {
-        updateDictionary(i, m + offset + 1, n + offset + 1, &gDictionary);
-      }
-      else {
-        updateDictionary(i, m + strlen(line) - offset + 1, n + strlen(line) - offset + 1, &gDictionary);
-      }
-    }
+void searchVertical () {
+  for (int n = 0; n < gWordGrid.gridWidth; n++) {
+    char line [kMaxLineLength];
+    getLineVertical (n, line);
+    searchLineVertical (line, n, true);
+    reverseString (line);
+    searchLineVertical (line, n, false);
   }
 }
-void searchDiagonalBS (int m, int n) {
-  char line [kMaxLineLength];
-  getLineDiagonalBS (m, n, line);
-  searchLineDiagonalBS (line, m, n, true);
-  reverseString (line);
-  searchLineDiagonalBS (line, m, n, false);
-}
 
 
 
-void getLineDiagonalFS (int m, int n, char *line) {
-  int k = 0;
-  for (int i = m, j = n; gWordGrid.wordGrid[i][j] != '\0'; i++, j--) {
-    line[k] = gWordGrid.wordGrid[i][j];
-    k++;
-  }
-  line[k + 1] = '\0';
-}
-void searchLineDiagonalFS (char *line, int m, int n, bool forward) {
-  for (int i = 0; i < gDictionary.numWords; i++) {
-    char *position = strstr(line, gDictionary.entries[i].word);
-    if (position != NULL) {
-      int offset = position - line;
-      if (forward) {
-        updateDictionary(i, m + offset + 1, n - offset + 1, &gDictionary);
-      }
-      else {
-        updateDictionary(i, m + strlen(line) - offset + 1, n + strlen(line) + offset + 1, &gDictionary);
-      }
-    }
-  }
-}
-void searchDiagonalFS (int m, int n) {
-  char line [kMaxLineLength];
-  getLineDiagonalFS (m, n, line);
-  searchLineDiagonalFS (line, m, n, true);
-  reverseString (line);
-  searchLineDiagonalFS (line, m, n, false);
-}
 
 
 void findWords (struct grid g, struct dictionary d) {
-  for (int i = 0;  i < g.gridHeight; i++) {
-    searchHorizontal (i);
-    searchDiagonalFS (i, 0);
-    searchDiagonalBS (i, 0);
+  searchHorizontal ();
+  searchVertical ();
+  
+  for (int i = 0;  i < g.gridHeight; i++) { // LEFT
+    //searchDiagonal (i, 0);
+    //searchDiagonalBSLeft (i, 0);
   }
-  for (int i = 0; i < g.gridWidth; i++) {
-    searchVertical (i);
-    searchDiagonalFS (0, i); // Not working backwards ??
-    searchDiagonalBS (0, i); // Not working backwards ??
+  for (int i = 0; i < g.gridWidth; i++) { // TOP
+    //searchDiagonalFS (0, i); 
+    //searchDiagonalBS (0, i); 
   }
 }
