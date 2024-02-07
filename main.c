@@ -61,7 +61,29 @@ void getLineDiagonalLU (int, char *);
 void searchLineDiagonalLU (int, char *);
 void findLU (int);
 
+void getLineDiagonalRD (int, char *);
+void searchLineDiagonalRD (int, char *);
+void findRD (int);
 
+void getLineDiagonalRU (int, char *);
+void searchLineDiagonalRU (int, char *);
+void findRU (int);
+
+void getLineDiagonalTR (int, char *);
+void searchLineDiagonalTR (int, char *);
+void findTR (int);
+
+void getLineDiagonalTL (int, char *);
+void searchLineDiagonalTL (int, char *);
+void findTL (int);
+
+void getLineDiagonalBR (int, char *);
+void searchLineDiagonalBR (int, char *);
+void findBR (int);
+
+void getLineDiagonalBL (int, char *);
+void searchLineDiagonalBL (int, char *);
+void findBL (int);
 
 
 
@@ -398,27 +420,50 @@ void findTR (int n) {
   searchLineDiagonalTR (n, line);
 }
 
-void getLineDiagonalTL (int m, char *line) {
+void getLineDiagonalTL (int n, char *line) {
   int k = 0;
-  for (int n = gWordGrid.gridWidth; gWordGrid.wordGrid[m][n] != '\0'; m++, n++) {
+  for (int m = 1; gWordGrid.wordGrid[m][n] != '\0'; m++, n--) {
     line [k] = gWordGrid.wordGrid[m][n];
     line [k + 1] = '\0';
     k++;
   }
 }
-void searchLineDiagonalTL (int m, char *line) {
+void searchLineDiagonalTL (int n, char *line) {
   for (int i = 0; i < gDictionary.numWords; i++) {
     char *position = strstr(line, gDictionary.entries[i].word);
     int offset = position - line;
     if (position != NULL) {
-      updateDictionary(i, m + offset, m + offset, &gDictionary);
+      updateDictionary(i, 1 + offset, n - offset, &gDictionary);
     }
   }
 }
-void findTL (int m) {
+void findTL (int n) {
   char line [kMaxLineLength];
-  getLineDiagonalTL (m, line);
-  searchLineDiagonalTL (m, line);
+  getLineDiagonalTL (n, line);
+  searchLineDiagonalTL (n, line);
+}
+
+void getLineDiagonalBR (int n, char *line) {
+  int k = 0;
+  for (int m = gWordGrid.gridHeight; gWordGrid.wordGrid[m][n] != '\0'; m--, n++) {
+    line [k] = gWordGrid.wordGrid[m][n];
+    line [k + 1] = '\0';
+    k++;
+  }
+}
+void searchLineDiagonalBR (int n, char *line) {
+  for (int i = 0; i < gDictionary.numWords; i++) {
+    char *position = strstr(line, gDictionary.entries[i].word);
+    int offset = position - line;
+    if (position != NULL) {
+      updateDictionary(i, gWordGrid.gridHeight - offset, n + offset, &gDictionary);
+    }
+  }
+}
+void findBR (int n) {
+  char line [kMaxLineLength];
+  getLineDiagonalBR (n, line);
+  searchLineDiagonalBR (n, line);
 }
 
 void findWords (struct grid g, struct dictionary d) {
