@@ -243,7 +243,7 @@ void updateDictionary (int i, int m, int n, struct dictionary *d) {
 
 // Word Search
 void reverseString (char *line) {
-  for (int i = 0, j = strlen(line); i < j; i++, j--) {
+  for (int i = 0, j = strlen(line) - 1; i < j; i++, j--) {
     char temp = line[i];
     line[i] = line[j];
     line[j] = temp;
@@ -256,19 +256,20 @@ void getLineHorizontal (int m, char *line) {
 void searchLineHorizontal (char *line, int m, bool forwards) {
   for (int i = 0; i < gDictionary.numWords; i++) {
     char *position = strstr(line, gDictionary.entries[i].word);
+    
     if (position != NULL) {
       int offset = position - line;
       if (forwards) {
         updateDictionary(i, m, offset + 1, &gDictionary);
       }
       else {
-        updateDictionary(i, m, strlen(line) - offset + 1, &gDictionary);
+        updateDictionary(i, m, strlen(line) - offset, &gDictionary);
       }
     }
   }
 }
 void searchHorizontal () {
-  for (int m = 0; m < gWordGrid.gridHeight; m++) {
+  for (int m = 1; m < gWordGrid.gridHeight + 1; m++) {
     char line [kMaxLineLength];
     getLineHorizontal (m, line);
     searchLineHorizontal (line, m, true);
@@ -279,13 +280,14 @@ void searchHorizontal () {
 
 
 void getLineVertical (int n, char *line) {
-  for (int i = 1; i < gWordGrid.gridHeight + 2; i ++) {
+  for (int i = 1; i < gWordGrid.gridHeight + 2; i++) {
     line[i - 1] = gWordGrid.wordGrid[i][n];
   }
 }
 void searchLineVertical (char *line, int n, bool forwards) {
   for (int i = 0; i < gDictionary.numWords; i++) {
     char *position = strstr(line, gDictionary.entries[i].word);
+    printf ("%s\n", position);
     if (position != NULL) {
       int offset = position - line;
       if (forwards) {
@@ -298,7 +300,7 @@ void searchLineVertical (char *line, int n, bool forwards) {
   }
 }
 void searchVertical () {
-  for (int n = 0; n < gWordGrid.gridWidth; n++) {
+  for (int n = 1; n < gWordGrid.gridWidth+ 1; n++) {
     char line [kMaxLineLength];
     getLineVertical (n, line);
     searchLineVertical (line, n, true);
