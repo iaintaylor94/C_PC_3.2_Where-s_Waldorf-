@@ -287,7 +287,7 @@ void getLineVertical (int n, char *line) {
 void searchLineVertical (char *line, int n, bool forwards) {
   for (int i = 0; i < gDictionary.numWords; i++) {
     char *position = strstr(line, gDictionary.entries[i].word);
-    printf ("%s\n", position);
+
     if (position != NULL) {
       int offset = position - line;
       if (forwards) {
@@ -342,7 +342,7 @@ void searchLineDiagonalLU (int m, char *line) {
     char *position = strstr(line, gDictionary.entries[i].word);
     int offset = position - line;
     if (position != NULL) {
-      updateDictionary(i, m + offset, 1 + offset, &gDictionary);
+      updateDictionary(i, m + offset, offset + 1, &gDictionary);
     }
   }
 }
@@ -412,7 +412,7 @@ void searchLineDiagonalTR (int n, char *line) {
     char *position = strstr(line, gDictionary.entries[i].word);
     int offset = position - line;
     if (position != NULL) {
-      updateDictionary(i, offset, n + offset, &gDictionary);
+      updateDictionary(i, offset + 1, n + offset, &gDictionary);
     }
   }
 }
